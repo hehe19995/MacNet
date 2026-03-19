@@ -1,8 +1,13 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 
-declare global {
-  interface Window {
-    electron: ElectronAPI
-    api: unknown
+export interface WindowAPI {
+  electron: ElectronAPI
+  network: {
+    onTrafficUpdate: (callback: (data) => void) => void
   }
+  api: unknown
+}
+
+declare global {
+  interface Window extends WindowAPI {}
 }

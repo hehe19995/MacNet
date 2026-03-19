@@ -1,13 +1,8 @@
 import { exec } from 'child_process'
 import { promisify } from 'util'
+import { NetworkConnection } from '../renderer/src/types'
 
 const execAsync = promisify(exec)
-
-export interface NetworkConnection {
-  processName: string
-  pid: string
-  IPConnection: string
-}
 
 export async function getNetwork(): Promise<NetworkConnection[]> {
   try {
@@ -22,7 +17,9 @@ export async function getNetwork(): Promise<NetworkConnection[]> {
       return {
         processName: parts[0],
         pid: parts[1],
-        IPConnection: parts[8]
+        //正则划分local和remote
+        localAddress: parts[8],
+        remoteAddress: parts[8]
       }
     })
   } catch (error) {
