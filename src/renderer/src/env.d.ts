@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="../../../src/preload/index.d.ts" />
 
 import type { WindowAPI } from '../../preload/index.d.ts'
 

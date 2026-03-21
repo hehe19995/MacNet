@@ -3,6 +3,8 @@ export interface NetworkConnection {
   pid: string
   localAddress: string
   remoteAddress: string
+  bytesIn?: number
+  bytesOut?: number
   country?: string
   isSecure?: boolean
 }
