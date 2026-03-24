@@ -5,6 +5,8 @@ export interface NetworkConnection {
   remoteAddress: string
   bytesIn?: number
   bytesOut?: number
-  country?: string
   isSecure?: boolean
+  country?: string
+  city?: string
+  ll?: [number, number]
 }

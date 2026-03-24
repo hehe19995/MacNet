@@ -1,6 +1,7 @@
 import { exec } from 'child_process'
 import { promisify } from 'util'
 import { NetworkConnection } from '../types/network'
+import { getGeoInfoSync } from './services/geoServices'
 
 const execAsync = promisify(exec)
 
@@ -53,13 +54,16 @@ export async function getNetwork(): Promise<NetworkConnection[]> {
 
       const processName = parts[0]
       const traffic = trafficMap.get(processName) || { bytesIn: 0, bytesOut: 0 }
+      const geoInfo = getGeoInfoSync(remoteAddress)
+      
       return {
         processName: parts[0],
         pid: parts[1],
         localAddress,
         remoteAddress,
         bytesIn: traffic.bytesIn,
-        bytesOut: traffic.bytesOut
+        bytesOut: traffic.bytesOut,
+        ...geoInfo
       }
     })
   } catch (error) {
