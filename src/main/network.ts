@@ -3,14 +3,20 @@ import { promisify } from 'util'
 import { NetworkConnection } from '../types/network'
 import { getGeoInfoSync } from './services/geoServices'
 
+interface TrafficStats {
+  bytesIn: number
+  bytesOut: number
+}
+
 const execAsync = promisify(exec)
 
-async function getTrafficStats(): Promise<Map<string, { bytesIn: number; bytesOut: number }>> {
+async function getTrafficStats(): Promise<Map<string, TrafficStats>> {
   try {
+    // -P 按进程聚合。-L 1 输出一次。-J bytes_in,bytes_out 仅输出in和out列。-m tcp 仅显示tcp协议连接
     const { stdout } = await execAsync('nettop -P -L 1 -J bytes_in,bytes_out -m tcp')
-    const trafficMap = new Map<string, { bytesIn: number; bytesOut: number }>()
+    const trafficMap = new Map<string, TrafficStats>()
 
-    //nettop out: process.PID,bytesIn,bytesOut
+    //nettop 输出: process.PID,bytesIn,bytesOut
     const lines = stdout.trim().split('\n').slice(1)
     lines.forEach((line) => {
       const parts = line.split(',')
@@ -55,7 +61,7 @@ export async function getNetwork(): Promise<NetworkConnection[]> {
       const processName = parts[0]
       const traffic = trafficMap.get(processName) || { bytesIn: 0, bytesOut: 0 }
       const geoInfo = getGeoInfoSync(remoteAddress)
-      
+
       return {
         processName: parts[0],
         pid: parts[1],
