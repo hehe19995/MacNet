@@ -6,3 +6,4 @@ out
 *.log*
 .github
 .vscode
+.roomodes

@@ -23,7 +23,6 @@ export const useNetworkStore = defineStore('network', () => {
       }
       currentBatch.get(item.processName)!.add(item.remoteAddress)
       currentPids.get(item.processName)!.add(item.pid)
-      
       const traffic = currentTraffic.get(item.processName)!
       traffic.bytesIn = item.bytesIn || 0
       traffic.bytesOut = item.bytesOut || 0
